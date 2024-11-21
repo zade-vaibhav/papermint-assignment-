@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 
 function Home() {
     const [expenses, setExpenses] = useState([]);
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [totalExpense, setTotalExpense] = useState(0);
+    const navigate = useNavigate();
 
     const fetchExpenses = async () => {
-      const token = localStorage.getItem('uid'); // Retrieve token
+      const token = localStorage.getItem('uid');
+      if(!token){
+        navigate('/login');
+        return;
+      }
       try {
         const response = await fetch('http://localhost:4000/api/v1/user/expance/entries', {
           headers: {
@@ -15,6 +23,17 @@ function Home() {
         const data = await response.json();
         if (response.ok) {
           setExpenses(data);
+          let income = 0;
+          let expense = 0;
+          data.forEach((entry) => {
+            if (entry.type === 'Income') {
+              income += entry.amount;
+            } else if (entry.type === 'Expense') {
+              expense += entry.amount;
+            }
+          });
+          setTotalIncome(income);
+          setTotalExpense(expense);
         } else {
           console.error('Error:', data.message);
         }
@@ -116,6 +135,8 @@ function Home() {
 ))}
 
     </ul>
+    {/* Net balance = Total Income - Total Expenses */}
+    <h2 style={{ marginBottom: '20px' }}>Net balance = {totalIncome - totalExpense}</h2>
   </div>
   )
 }

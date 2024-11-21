@@ -45,7 +45,7 @@ function AddExpense() {
   };
 
   return (
-    <div style={{ margin: '20px' }}>
+    <div style={{ margin: '20px',width:"600px" }}>
       <h2 style={{ marginBottom: '20px' }}>Add Expense/Income</h2>
       <form
         onSubmit={handleSubmit}
@@ -79,7 +79,7 @@ function AddExpense() {
             style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
           />
         </div>
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{display: 'block', marginBottom: '10px' }}>
           <label style={{ display: 'block', marginBottom: '5px' }}>Date:</label>
           <input
             type="date"

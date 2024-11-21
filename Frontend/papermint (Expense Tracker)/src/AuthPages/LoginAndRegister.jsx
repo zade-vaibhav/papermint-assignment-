@@ -69,7 +69,6 @@ function Login() {
                 justifyContent: 'center',
                 height: '100vh',
                 width:"100vw",
-                backgroundColor: '#f3f4f6',
             }}
         >
             <div
