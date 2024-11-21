@@ -22,8 +22,8 @@ function Login() {
         e.preventDefault(); // Prevent default form submission behavior
     
         const endpoint = isLogin
-            ? 'http://localhost:4000/api/v1/login'
-            : 'http://localhost:4000/api/v1/register'; // Determine endpoint
+            ? 'https://papermint-assignment.onrender.com/api/v1/login'
+            : 'https://papermint-assignment.onrender.com/api/v1/register'; // Determine endpoint
         const payload = formData; // Prepare payload from form data
     
         try {
