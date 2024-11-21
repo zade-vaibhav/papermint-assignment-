@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [isLogin, setIsLogin] = useState(true);
@@ -6,6 +7,8 @@ function Login() {
         email: '',
         password: ''
     });
+    const navigate = useNavigate();
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -15,16 +18,47 @@ function Login() {
         });
     };
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        if (isLogin) {
-            console.log("Login Data: ", formData);
-            alert("Login successful!");
-        } else {
-            console.log("Register Data: ", formData);
-            alert("Registration successful!");
+    const handleFormSubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission behavior
+    
+        const endpoint = isLogin
+            ? 'http://localhost:4000/api/v1/login'
+            : 'http://localhost:4000/api/v1/register'; // Determine endpoint
+        const payload = formData; // Prepare payload from form data
+    
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload), // Convert payload to JSON
+            });
+    
+            // Parse response
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert(isLogin ? 'Login successful!' : 'Registration successful!');
+                console.log(`${isLogin ? 'Login' : 'Register'} Data:`, data);
+    
+                if (isLogin && data.token) {
+                    // Save the token to local storage
+                    localStorage.setItem('uid', data.token);
+    
+                    // Navigate to the home page
+                    navigate('/');
+                }
+            } else {
+                alert(data.message || 'Something went wrong');
+                console.error('Error:', data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
         }
     };
+    
 
     return (
         <div
